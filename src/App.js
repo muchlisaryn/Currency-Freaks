@@ -17,6 +17,7 @@ function App() {
 
     const [based, setBased] = useState()
     const [currency, setCurrency] = useState([])
+    const [exchange, setExchange] = useState([])
 
 
     useEffect(() => {
@@ -24,12 +25,21 @@ function App() {
         .then((Response) => {
             setBased(Response.data.base)
             setCurrency(Response.data.rates)
+            setExchange(Object.values(Response.data.rates))
           
         })
         .catch((error) => {
           console.log(error)
         })
     }, [])
+
+   const weBuy = (value) => {
+      return value + (value * 5 / 100)
+   }
+
+   const weSell = (value) => {
+    return value - (value * 5 / 100)
+   }
 
   return (
     <div className="App">
@@ -44,20 +54,20 @@ function App() {
 
       <div className='px-5'>
         <div className='pb-4'>We Buy</div>
-        {Object.values(currency).map((values) => 
-        <WeBuy value = {values + values * 5 / 100}/> )}
+        {exchange.map((values) => 
+        <WeBuy value = {weBuy(values)}/> )}
       </div>
 
       <div className='px-5'>
         <div  className='pb-4'>Exchange Rate</div>
-        {Object.values(currency).map((values) => 
+        {exchange.map((values) => 
         <Exchange value = {values}/>)}
       </div>
 
       <div className='px-5'>
         <div className='pb-4'>We Sell</div>
-        {Object.values(currency).map((values) => 
-        <WeSell value = {values - values * 5 / 100}/> )}
+        {exchange.map((values) => 
+        <WeSell value = {weSell(values)}/> )}
       </div>
 
       </div>
